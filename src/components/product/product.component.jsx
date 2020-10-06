@@ -1,13 +1,57 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import './product.style.scss';
 
 class Product extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {};
+		this.state = {
+			name: '',
+			category: '',
+			description: '',
+			pricePerUnit: '',
+			color: '',
+			categories: []
+		};
+		this.handleChange = this.handleChange.bind(this);
+		// this.handleSubmit = this.handleChange.bind(this);
+	}
+
+	handleChange(e) {
+		this.setState({ [e.target.name]: e.target.value });
+	}
+
+	handleSubmit(e) {
+		e.preventDefault();
+	}
+
+	componentDidMount() {
+		// 1) load category from the database
+		let categories;
+		const loadCategory = async () => {
+			try {
+				const response = await axios.get('http://localhost:2020/api/v1/categories');
+				if (response.data.status === 'success') {
+					// console.log(response.data.data.allCategory);
+
+					categories = response.data.data.allCategory;
+					this.setState({ categories: categories });
+				}
+			} catch (err) {
+				console.log(err.response.data.message);
+			}
+		};
+		loadCategory();
 	}
 
 	render() {
+		console.log(this.state);
+		const categories = this.state.categories.map((categorie) => (
+			<option key={categorie._id} value={categorie}>
+				{categorie.name}
+			</option>
+		));
+
 		return (
 			<div className="container">
 				<div className="alert alert-success">
@@ -17,11 +61,8 @@ class Product extends Component {
 					<div className="col-md-8 m-auto">
 						<div className="form-group">
 							<label htmlFor="category">Product Category</label>
-							<select name="category" id="category" className="form-control">
-								<option selected value="tiles">
-									Tiles
-								</option>
-								<option value="sanitary">Sanitary</option>
+							<select name="category" id="category" className="form-control" onChange={this.handleChange}>
+								{categories}
 							</select>
 						</div>
 
@@ -33,6 +74,7 @@ class Product extends Component {
 								id="name"
 								placeholder="Enter product name"
 								className="form-control"
+								onChange={this.handleChange}
 							/>
 						</div>
 						<div className="form-group">
@@ -43,6 +85,7 @@ class Product extends Component {
 								name="description"
 								id="description"
 								rows={4}
+								onChange={this.handleChange}
 							/>
 						</div>
 
@@ -54,6 +97,7 @@ class Product extends Component {
 								id="pricePerUnit"
 								placeholder="Enter price per unit"
 								className="form-control"
+								onChange={this.handleChange}
 							/>
 							<small className="form-text text-muted">
 								EX: 1PC 24X20 tile is 250TK. So field value will be 250{' '}
@@ -67,6 +111,7 @@ class Product extends Component {
 								id="color"
 								placeholder="Enter product color"
 								className="form-control"
+								onChange={this.handleChange}
 							/>
 						</div>
 
@@ -78,6 +123,7 @@ class Product extends Component {
 								id="size"
 								placeholder="Enter product size"
 								className="form-control"
+								onChange={this.handleChange}
 							/>
 							<small className="form-text text-muted">
 								EX: It may be height x width or height x width x radious
@@ -85,7 +131,7 @@ class Product extends Component {
 						</div>
 						<div className="form-group">
 							<label htmlFor="baseUnit">Product Base Unit</label>
-							<select name="baseUnit" id="baseUnit" className="form-control">
+							<select name="baseUnit" id="baseUnit" className="form-control" onChange={this.handleChange}>
 								<option value="cm" selected>
 									CM
 								</option>
@@ -104,6 +150,7 @@ class Product extends Component {
 								id="company"
 								placeholder="Enter product company name"
 								className="form-control"
+								onChange={this.handleChange}
 							/>
 						</div>
 
@@ -115,6 +162,7 @@ class Product extends Component {
 								id="type"
 								placeholder="Enter product type"
 								className="form-control"
+								onChange={this.handleChange}
 							/>
 							<small className="form-text text-muted">
 								EX: For tiles it will be wall/floor/many more
@@ -128,10 +176,11 @@ class Product extends Component {
 								id="model"
 								placeholder="Enter product model"
 								className="form-control"
+								onChange={this.handleChange}
 							/>
 							<small className="form-text text-warning">EX: It must be unique</small>
 						</div>
-						<button type="submit" className="btn btn-primary mr-2">
+						<button className="btn btn-primary mr-2" onClick={(event) => this.handleSubmit(event)}>
 							Add Product
 						</button>
 						<button type="reset" className="btn btn-danger">

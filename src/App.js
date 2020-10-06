@@ -13,22 +13,22 @@ function App() {
 			<Header />
 			<div className="container-fludi px-2">
 				<Header />
-				<div className="alert alert-danger">
+				{/* <div className="alert alert-danger">
 					Before edit or update any information please ensure otherwise it will effect on your store.
-				</div>
+				</div> */}
 				<div className="row">
 					<div className="col-sm-6 col-md-3">
 						<Sidebar />
 					</div>
 					<div className="col-sm-6 col-md-9">
 						<Switch>
-							<Route exact path="/" component={HomePage} />
-							<Route exact path="/addNewProduct" component={Product} />
-							<Route exact path="/allProducts" component={ProudctList} />
+							<Route exact path="/" render={() => <HomePage />} />
+							<Route exact path="/addNewProduct" render={() => <Product />} />
+							<Route exact path="/allProducts" render={() => <ProudctList />} />
 							<Route exact path="/updateStock" />
 							<Route exact path="/removeProduct" />
 							{/* <Redirect to="/allProducts" /> */}
-							<Redirect to="/" />
+							<Route render={() => <h1>Error Happend</h1>} />
 						</Switch>
 					</div>
 				</div>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 class Sidebar extends Component {
 	constructor(props) {
@@ -10,21 +10,41 @@ class Sidebar extends Component {
 	render() {
 		return (
 			<div className="list-group mb-5">
-				<Link className="list-group-item list-group-item-action" to="/home">
+				<NavLink exact className="list-group-item list-group-item-action" activeClassName="active" to="/">
 					Home
-				</Link>
-				<Link className="list-group-item list-group-item-action" to="/addNewProduct">
+				</NavLink>
+				<NavLink
+					exact
+					className="list-group-item list-group-item-action"
+					activeClassName="active"
+					to="/addNewProduct"
+				>
 					Add New Product
-				</Link>
-				<Link className="list-group-item list-group-item-action" to="/allProducts">
+				</NavLink>
+				<NavLink
+					exact
+					className="list-group-item list-group-item-action"
+					activeClassName="active"
+					to="/allProducts"
+				>
 					Show All Products
-				</Link>
-				<Link className="list-group-item list-group-item-action" to="/updateStock">
+				</NavLink>
+				<NavLink
+					exact
+					className="list-group-item list-group-item-action"
+					activeClassName="active"
+					to="/updateStock"
+				>
 					Update Stock Manually
-				</Link>
-				<Link className="list-group-item list-group-item-action list-group-item-danger" to="/removeProduct">
+				</NavLink>
+				<NavLink
+					activeClassName="active"
+					exact
+					className="list-group-item list-group-item-action list-group-item-danger"
+					to="/removeProduct"
+				>
 					Remove Product
-				</Link>
+				</NavLink>
 			</div>
 		);
 	}
