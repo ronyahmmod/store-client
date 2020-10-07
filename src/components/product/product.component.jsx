@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import validator from 'validator';
 import axios from 'axios';
 import './product.style.scss';
 
@@ -9,9 +10,17 @@ class Product extends Component {
 			name: '',
 			category: '',
 			description: '',
-			pricePerUnit: '',
+			pricePerUnit: 0,
 			color: '',
-			categories: []
+			categories: [],
+
+			size: [],
+			company: '',
+			origin: '',
+			type: '',
+			model: '',
+			remark: '',
+			error: []
 		};
 		this.handleChange = this.handleChange.bind(this);
 		// this.handleSubmit = this.handleChange.bind(this);
@@ -21,8 +30,27 @@ class Product extends Component {
 		this.setState({ [e.target.name]: e.target.value });
 	}
 
+	validateFormData() {
+		console.log(this.state);
+		const error = [];
+		if (!this.state.categorie) {
+			console.log('Empty category');
+			error.push({ fieldName: 'category', message: 'You must provide category' });
+			this.setState(
+				(st) => ({ ...st, error: error }),
+				() => {
+					console.log('Complete');
+				}
+			);
+		} else if (!this.state.name) {
+			error.push({ fieldName: 'name', message: 'You must provide product name' });
+			this.setState((st) => ({ ...st, error: error }));
+		}
+	}
+
 	handleSubmit(e) {
 		e.preventDefault();
+		this.validateFormData();
 	}
 
 	componentDidMount() {
@@ -45,23 +73,36 @@ class Product extends Component {
 	}
 
 	render() {
-		console.log(this.state);
 		const categories = this.state.categories.map((categorie) => (
-			<option key={categorie._id} value={categorie}>
+			<option key={categorie._id} value={categorie.name}>
 				{categorie.name}
 			</option>
 		));
 
 		return (
 			<div className="container">
-				<div className="alert alert-success">
-					Please add a brand new product [Duplicate Model Number Not Possible]
-				</div>
+				{/* {this.state.error ? (
+					<div className="alert alert-danger">{this.state.error}</div>
+				) : (
+					<div className="alert alert-success">
+						Please add a brand new product [Duplicate Model Number Not Possible]
+					</div>
+				)} */}
+
 				<form style={{ marginBottom: '100px' }}>
 					<div className="col-md-8 m-auto">
 						<div className="form-group">
 							<label htmlFor="category">Product Category</label>
-							<select name="category" id="category" className="form-control" onChange={this.handleChange}>
+							<select
+								name="category"
+								id="category"
+								className="form-control"
+								onChange={this.handleChange}
+								value={this.state.category}
+							>
+								<option value="" selected>
+									Select
+								</option>
 								{categories}
 							</select>
 						</div>
@@ -175,6 +216,18 @@ class Product extends Component {
 								name="model"
 								id="model"
 								placeholder="Enter product model"
+								className="form-control"
+								onChange={this.handleChange}
+							/>
+							<small className="form-text text-warning">EX: It must be unique</small>
+						</div>
+						<div className="form-group">
+							<label htmlFor="remark">Remark</label>
+							<input
+								type="text"
+								name="remark"
+								id="remark"
+								placeholder="Enter product remark"
 								className="form-control"
 								onChange={this.handleChange}
 							/>
